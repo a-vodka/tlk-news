@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from gtts import gTTS
 import os
 import time
+from langdetect import detect
 
 # Telegram channel URL (replace with your target channel)
 CHANNEL_URL = "https://t.me/s/tlknewsua"
@@ -32,7 +33,15 @@ def get_latest_messages():
 
 def text_to_speech(text):
     """Convert text to speech and play it"""
-    tts = gTTS(text=text, lang="ru")  # Change 'uk' to 'en' for English, 'ru' for Russian, etc.
+    try:
+        lang = detect(text)  # autodetect language
+        print(f"Detected language: {lang}")
+    except Exception:
+        lang = "ru"
+
+
+    """Convert text to speech and play it"""
+    tts = gTTS(text=text, lang=lang)  # Change 'uk' to 'en' for English, 'ru' for Russian, etc.
     filename = "message.mp3"
     tts.save(filename)
 
