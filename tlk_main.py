@@ -24,7 +24,10 @@ def get_latest_messages():
         print("No messages found.")
         return None
 
-    latest_message = messages[-1].get_text(strip=True)
+    for tag in messages[-1].find_all(["i", "a", "tg-emoji"]):
+        tag.decompose()
+
+    latest_message = messages[-1].get_text("\n", strip=True)
     return latest_message
 
 def text_to_speech(text):
@@ -47,8 +50,8 @@ if __name__ == "__main__":
         latest_message = get_latest_messages()
         
         if latest_message and latest_message != last_text:
-            print(f"New message: {latest_message}")
+            print(f"New message:\n{latest_message}")
             text_to_speech(latest_message)
             last_text = latest_message
         
-        time.sleep(10)  # Check for new messages every 60 seconds
+        time.sleep(30)  # Check for new messages every 60 seconds
