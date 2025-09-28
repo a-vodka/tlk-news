@@ -39,8 +39,11 @@ def text_to_speech(text):
     except Exception:
         lang = "ru"
 
+    if (lang not in ["ru", "uk", "en"]):
+        lang = "ru"
 
-    """Convert text to speech and play it"""
+    text = "🔔 🚨. " + text # add attention sound 
+    #Convert text to speech and play it
     tts = gTTS(text=text, lang=lang)  # Change 'uk' to 'en' for English, 'ru' for Russian, etc.
     filename = "message.mp3"
     tts.save(filename)
