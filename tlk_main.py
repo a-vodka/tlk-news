@@ -10,10 +10,17 @@ CHANNEL_URL = "https://t.me/s/tlknewsua"
 
 def get_latest_messages():
     """Scrape latest messages from Telegram web version"""
-    response = requests.get(CHANNEL_URL)
-    
-    if response.status_code != 200:
-        print("Failed to fetch the channel page.")
+    try:
+        # set short timeouts to prevent freezing
+        response = requests.get(CHANNEL_URL, timeout=(5, 10))
+        response.raise_for_status()
+
+    except requests.exceptions.Timeout:
+        print("⚠️ Request timed out.")
+        return None
+        
+    except requests.exceptions.RequestException as e:
+        print(f"⚠️ Connection error: {e}")
         return None
 
     soup = BeautifulSoup(response.text, "html.parser")
